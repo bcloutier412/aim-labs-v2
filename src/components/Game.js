@@ -3,7 +3,7 @@ import './Game.css'
 
 function Game(props) {
     return(
-        <div></div>
+        <div>This is the game</div>
     )
 }
 

@@ -1,8 +1,11 @@
 body {
-  height: 100vh;
+  /* height: 100vh; */
+  padding: 0;
+  margin: 0;
   position: relative;
   background-size: 40px 40px;
   background-image: radial-gradient(circle, #6c757d 1px, rgba(0, 0, 0, 0) 1px);
+  font-family: 'Kdam Thmor Pro', sans-serif;
 }
 body::-webkit-scrollbar {
   display: none;
@@ -10,4 +13,19 @@ body::-webkit-scrollbar {
 body {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+.smallerscreen {
+  display: none;
+  text-align: center;
+  margin-top: 60px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+@media (max-width: 967px) {
+  .fullscreen {
+    display: none;
+  }
+  .smallerscreen {
+    display: block;
+  }
 }
