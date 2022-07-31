@@ -3,6 +3,7 @@ import Menu from "./Menu";
 import Game from "./Game";
 import EndGameStats from "./EndGameStats";
 import Stats from "./Stats";
+import Header from "./Header";
 
 class App extends React.Component {
   constructor() {
@@ -32,6 +33,7 @@ class App extends React.Component {
     }
     return (
       <>
+        <Header />
         <div>{stage}</div>
       </>
     );
