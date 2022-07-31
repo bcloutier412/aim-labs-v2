@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   cursor: crosshair;
+  font-family: 'Kdam Thmor Pro', sans-serif;
 }
 body {
   /* height: 100vh; */
@@ -10,7 +11,6 @@ body {
   position: relative;
   background-size: 40px 40px;
   background-image: radial-gradient(circle, #6c757d 1px, rgba(0, 0, 0, 0) 1px);
-  font-family: 'Kdam Thmor Pro', sans-serif;
 }
 body::-webkit-scrollbar {
   display: none;

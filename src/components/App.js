@@ -12,11 +12,15 @@ class App extends React.Component {
       gameStage: "Menu",
     };
   }
+
+  startGame() {
+    this.setState({ gameStage: "Game" })
+  }
   render() {
     let stage;
     switch (this.state.gameStage) {
       case "Menu":
-        stage = <Menu />;
+        stage = <Menu startGame={this.startGame.bind(this)}/>;
         break;
       case "Game":
         stage = <Game />;

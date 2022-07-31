@@ -1,22 +1,3 @@
-/* .header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.header-text {
-  font-size: 2rem;
-  margin: 0 20px;
-  padding: 20px;
-  font-weight: 700;
-  background-color: white;
-  color: #4a4e69;
-  text-shadow: 1.2px 1.2px 0px #14213d;
-}
-.horizontal-line {
-  height: 2px;
-  background-color: #006d77;
-  width: 600px;
-} */
 .menu-btns {
   text-align: center;
   width: 24%;
@@ -24,10 +5,10 @@
 }
 .menu-btn {
   padding: 8px 0;
-  font-size: 2rem;
   list-style-type: none;
   width: auto;
   background: white;
+  font-size: 2rem;
 }
 .menu-btn:hover {
   background-color: #b8dedc;
@@ -39,4 +20,26 @@
 .bottom-btn {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
+}
+.target-size-select {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border: none;
+  background-color: transparent;
+  font-size: 2rem;
+}
+.color {
+  width: 35px;
+  height: 36px;
+  margin-left: 15px;
+  border: none;
+}
+.minutes-select {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border: none;
+  background-color: transparent;
+  font-size: 2rem;
 }
