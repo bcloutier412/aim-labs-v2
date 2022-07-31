@@ -9,14 +9,14 @@ function StartBtn(props) {
   );
 }
 
-function TargetSelect() {
+function TargetSelect(props) {
   return (
     <div className="menu-btn">
-      <select className="target-size-select">
-        <option value="medium">TARGET SIZE</option>
-        <option value="hard">SMALL</option>
-        <option value="medium">MEDIUM</option>
-        <option value="easy">LARGE</option>
+      <select className="target-size-select" onChange={props.onChange}>
+        <option value="48">TARGET SIZE</option>
+        <option value="28">SMALL</option>
+        <option value="48">MEDIUM</option>
+        <option value="68">LARGE</option>
       </select>
     </div>
   );
@@ -59,7 +59,7 @@ function Menu(props) {
     <>
       <div className="menu-btns">
         <StartBtn onClick={props.startGame}/>
-        <TargetSelect />
+        <TargetSelect onChange={props.changeTargetDiameter}/>
         <ColorSelect />
         <MinutesSelect />
         <ClearDataBtn />

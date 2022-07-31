@@ -1,7 +1,6 @@
 import React from "react";
 import Menu from "./Menu";
 import Game from "./Game";
-import EndGameStats from "./EndGameStats";
 import Stats from "./Stats";
 import Header from "./Header";
 
@@ -15,18 +14,25 @@ class App extends React.Component {
       gameStage: "Menu",
       targetDiameter: 48 + game.targetGap,
       targetColor: "#24B7C2",
-      minute: 1
+      minute: 1,
     };
   }
-
+  changeTargetDiameter(e) {
+    this.setState({ targetDiameter: parseInt(e.target.value) + game.targetGap})
+  }
   startGame() {
-    this.setState({ gameStage: "Game" })
+    this.setState({ gameStage: "Game" });
   }
   render() {
     let stage;
     switch (this.state.gameStage) {
       case "Menu":
-        stage = <Menu startGame={this.startGame.bind(this)}/>;
+        stage = (
+          <Menu
+            startGame={this.startGame.bind(this)}
+            changeTargetDiameter={this.changeTargetDiameter.bind(this)}
+          />
+        );
         break;
       case "Game":
         stage = <Game />;
