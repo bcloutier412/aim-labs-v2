@@ -5,11 +5,17 @@ import EndGameStats from "./EndGameStats";
 import Stats from "./Stats";
 import Header from "./Header";
 
+function game() {
+  this.targetGap = 3;
+}
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       gameStage: "Menu",
+      targetDiameter: 48 + game.targetGap,
+      targetColor: "#24B7C2",
+      minute: 1
     };
   }
 
@@ -24,9 +30,6 @@ class App extends React.Component {
         break;
       case "Game":
         stage = <Game />;
-        break;
-      case "EndGameStats":
-        stage = <EndGameStats />;
         break;
       case "Stats":
         stage = <Stats />;
