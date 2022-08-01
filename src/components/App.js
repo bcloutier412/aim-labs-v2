@@ -61,6 +61,7 @@ class App extends React.Component {
             changeTargetDiameter={this.changeTargetDiameter.bind(this)}
             changeTargetColor={this.changeTargetColor.bind(this)}
             changeMinute={this.changeMinute.bind(this)}
+            targetColor={this.state.targetColor}
           />
         );
         break;

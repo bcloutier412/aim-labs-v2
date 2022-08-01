@@ -44,7 +44,7 @@ class ColorSelect extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: "#24B7C2"
+      value: props.targetColor
     }
   }
   render() {
@@ -57,7 +57,6 @@ class ColorSelect extends React.Component {
           value={this.state.value}
           onChange={(e) => {
             this.props.changeTargetColor(e)
-            this.setState({value:e.target.value})
           }}
         />
       </div>
@@ -103,7 +102,7 @@ function Menu(props) {
       <div className="menu-btns">
         <StartBtn startGame={props.startGame}/>
         <TargetSelect changeTargetDiameter={props.changeTargetDiameter}/>
-        <ColorSelect changeTargetColor={props.changeTargetColor}/>
+        <ColorSelect changeTargetColor={props.changeTargetColor} targetColor={props.targetColor}/>
         <MinuteSelect changeMinute={props.changeMinute}/>
         <ClearDataBtn />
       </div>
