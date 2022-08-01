@@ -3,9 +3,19 @@ import Menu from "./Menu";
 import Game from "./Game";
 import Stats from "./Stats";
 import Header from "./Header";
+
+/*
+  Game Object
+  @Desc: This game object holds any constant values that will be used throughout the game.
+*/
 const game = {
   targetGap: 3,
 };
+
+/*
+  App Component
+  @Desc: App Component that uses conditional rendering to render out 3 different states of the game: Menu, Game, Stats
+*/
 class App extends React.Component {
   constructor() {
     super();
@@ -16,6 +26,11 @@ class App extends React.Component {
       minute: 1,
     };
   }
+  
+  /*
+    Menu Functions
+    @Desc:
+  */
   changeTargetDiameter(e) {
     this.setState({
       targetDiameter: parseInt(e.target.value) + game.targetGap,
@@ -30,6 +45,12 @@ class App extends React.Component {
   startGame() {
     this.setState({ gameStage: "Game" });
   }
+
+  /*
+    Render
+    @Desc: This funciton renders all the different stages of the game. A switch statement is used to determine
+    what component to render next. The state will be controlled from different functions passed down to buttons in the components
+  */
   render() {
     let stage;
     switch (this.state.gameStage) {
