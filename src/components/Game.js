@@ -3,7 +3,7 @@ import './Game.css'
 
 function Game(props) {
     return(
-        <div>This is the game</div>
+        <div>This is the game {props.targetDiameter}{props.targetColor}{props.minute}</div>
     )
 }
 

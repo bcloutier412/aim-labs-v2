@@ -3,10 +3,9 @@ import Menu from "./Menu";
 import Game from "./Game";
 import Stats from "./Stats";
 import Header from "./Header";
-
-function game() {
-  this.targetGap = 3;
-}
+const game = {
+  targetGap: 3,
+};
 class App extends React.Component {
   constructor() {
     super();
@@ -18,7 +17,15 @@ class App extends React.Component {
     };
   }
   changeTargetDiameter(e) {
-    this.setState({ targetDiameter: parseInt(e.target.value) + game.targetGap})
+    this.setState({
+      targetDiameter: parseInt(e.target.value) + game.targetGap,
+    });
+  }
+  changeTargetColor(e) {
+    this.setState({ targetColor: e.target.value });
+  }
+  changeMinute(e) {
+    this.setState({ minute: e.target.value });
   }
   startGame() {
     this.setState({ gameStage: "Game" });
@@ -31,11 +38,19 @@ class App extends React.Component {
           <Menu
             startGame={this.startGame.bind(this)}
             changeTargetDiameter={this.changeTargetDiameter.bind(this)}
+            changeTargetColor={this.changeTargetColor.bind(this)}
+            changeMinute={this.changeMinute.bind(this)}
           />
         );
         break;
       case "Game":
-        stage = <Game />;
+        stage = (
+          <Game
+            targetDiameter={this.state.targetDiameter}
+            targetColor={this.state.targetColor}
+            minute={this.state.minute}
+          />
+        );
         break;
       case "Stats":
         stage = <Stats />;

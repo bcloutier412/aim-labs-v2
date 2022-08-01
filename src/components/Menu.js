@@ -23,6 +23,12 @@ function TargetSelect(props) {
 }
 
 class ColorSelect extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: "#24B7C2"
+    }
+  }
   render() {
     return (
       <div className="menu-btn">
@@ -30,18 +36,21 @@ class ColorSelect extends React.Component {
         <input
           className="color"
           type="color"
-          value="#24B7C2"
-          onChange={() => {}}
+          value={this.state.value}
+          onChange={(e) => {
+            this.props.onChange(e)
+            this.setState({value:e.target.value})
+          }}
         />
       </div>
     );
   }
 }
 
-function MinutesSelect() {
+function MinutesSelect(props) {
   return (
     <div className="menu-btn">
-      <select className="minutes-select">
+      <select className="minutes-select" onChange={props.onChange}>
         <option value="1">1 MINUTE</option>
         <option value="2">2 MINUTES</option>
         <option value="3">3 MINUTES</option>
@@ -60,8 +69,8 @@ function Menu(props) {
       <div className="menu-btns">
         <StartBtn onClick={props.startGame}/>
         <TargetSelect onChange={props.changeTargetDiameter}/>
-        <ColorSelect />
-        <MinutesSelect />
+        <ColorSelect onChange={props.changeTargetColor}/>
+        <MinutesSelect onChange={props.changeMinute}/>
         <ClearDataBtn />
       </div>
     </>
