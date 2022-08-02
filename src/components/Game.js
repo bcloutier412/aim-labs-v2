@@ -1,13 +1,13 @@
 import React from "react";
 import "./Game.css";
 
-//HELPER FUNCTIONS
-/*
-  @Desc: returns a random number based on the number of cols or rows and the target diameter
-*/
-function getRandomNum(num, targetDiameter) {
-  return (Math.floor(Math.random() * (num - 0)) + 0) * targetDiameter;
-}
+const wait = function (seconds) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, seconds * 1000);
+  });
+};
 /*
   Target Component
   @Desc: this component renders a div with the class of .target and onclick will;
@@ -24,9 +24,12 @@ class Target extends React.Component {
       (window.innerHeight * 0.9) / this.props.targetDiameter
     );
     this.state = {
-      top: getRandomNum(this.numOfRows, this.props.targetDiameter),
-      left: getRandomNum(this.numOfCols, this.props.targetDiameter),
+      top: this.getRandomNum(this.numOfRows, this.props.targetDiameter),
+      left: this.getRandomNum(this.numOfCols, this.props.targetDiameter),
     };
+  }
+  getRandomNum(num, targetDiameter) {
+    return (Math.floor(Math.random() * (num - 0)) + 0) * targetDiameter;
   }
   render() {
     return (
@@ -40,22 +43,24 @@ class Target extends React.Component {
         }}
         className="target"
         onClick={(e) => {
-          this.props.increaseTotalShots();
-          this.props.increaseTargetsHit();
-          this.props.increaseScore();
-          const newTop = getRandomNum(
-            this.numOfRows,
-            this.props.targetDiameter
-          );
-          const newLeft = getRandomNum(
-            this.numOfCols,
-            this.props.targetDiameter
-          );
-          this.setState({
-            top: newTop,
-            left: newLeft,
-          });
-          e.stopPropagation();
+          if (this.props.inPlay) {
+            this.props.increaseTotalShots();
+            this.props.increaseTargetsHit();
+            this.props.increaseScore();
+            const newTop = this.getRandomNum(
+              this.numOfRows,
+              this.props.targetDiameter
+            );
+            const newLeft = this.getRandomNum(
+              this.numOfCols,
+              this.props.targetDiameter
+            );
+            this.setState({
+              top: newTop,
+              left: newLeft,
+            });
+            e.stopPropagation();
+          }
         }}
       ></div>
     );
@@ -73,19 +78,44 @@ class InGameStats extends React.Component {
     this.state = {
       minute: this.props.minute,
       second: 0,
+      countdown: 3,
     };
   }
+
   formatSeconds(second) {
     if (second < 10) {
-      return '0' + second
-    } 
-    return second
+      return "0" + second;
+    }
+    return second;
+  }
+  renderCountdown() {
+    if (!this.props.inPlay) {
+      return this.state.countdown;
+    }
+  }
+  startCountdown() {
+    if (!this.props.inPlay) {
+      wait(1).then(() => {
+        if (this.state.countdown === 1) {
+          this.setState({ countdown: "GO!" });
+          wait(1).then(() => {
+            this.props.startPlay();
+          });
+        } else if (typeof this.state.countdown === "number") {
+          this.setState({ countdown: this.state.countdown - 1 });
+        }
+      });
+    }
   }
   render() {
     return (
       <div className="in-game-stats">
-        {this.state.minute}:{this.formatSeconds(this.state.second)} | {this.props.score} |{" "}
-        {this.props.accuracy}%
+        {this.state.minute}:{this.formatSeconds(this.state.second)} |{" "}
+        {this.props.score} | {this.props.accuracy}%
+        <div className="countdown">
+          {this.renderCountdown()}
+          {this.startCountdown()}
+        </div>
       </div>
     );
   }
@@ -115,7 +145,9 @@ class Game extends React.Component {
   increaseScore() {
     this.setState({ score: this.state.score + 1000 });
   }
-  startPlay() {}
+  startPlay() {
+    this.setState({ inPlay: true });
+  }
   render() {
     const array = [];
     for (let i = 0; i < 7; i++) {
@@ -128,6 +160,7 @@ class Game extends React.Component {
           increaseTotalShots={this.increaseTotalShots.bind(this)}
           increaseTargetsHit={this.increaseTargetsHit.bind(this)}
           increaseScore={this.increaseScore.bind(this)}
+          inPlay={this.state.inPlay}
         />
       );
     }
@@ -137,6 +170,8 @@ class Game extends React.Component {
           score={this.state.score}
           accuracy={this.state.accuracy}
           minute={this.props.minute}
+          inPlay={this.state.inPlay}
+          startPlay={this.startPlay.bind(this)}
         />
         <div
           className="game-board"

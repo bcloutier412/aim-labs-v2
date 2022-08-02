@@ -16,3 +16,12 @@
 .in-game-stats {
   text-align: center;
 }
+
+.countdown {
+  position: absolute;
+  font-size: 10rem;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}

@@ -57,6 +57,7 @@ class ColorSelect extends React.Component {
           value={this.state.value}
           onChange={(e) => {
             this.props.changeTargetColor(e)
+            this.setState({ value: e.target.value})
           }}
         />
       </div>
