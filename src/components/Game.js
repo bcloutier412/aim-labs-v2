@@ -1,6 +1,14 @@
 import React from "react";
 import "./Game.css";
 
+
+//HELPER FUNCTIONS
+/*
+  @Desc: returns a random number based on the number of cols or rows and the target diameter
+*/
+function getRandomNum(num, targetDiameter) {
+  return (Math.floor(Math.random() * (num - 0)) + 0) * targetDiameter;
+}
 /*
   Target Component
   @Desc: this component renders a div with the class of .target and onclick will;
@@ -8,9 +16,6 @@ import "./Game.css";
   change accuracy, increase total shots.
 */
 class Target extends React.Component {
-  getRandomNum(num, targetDiameter) {
-    return (Math.floor(Math.random() * (num - 0)) + 0) * targetDiameter;
-  }
   constructor(props) {
     super(props);
     this.numOfCols = Math.floor(
@@ -20,8 +25,8 @@ class Target extends React.Component {
       (window.innerHeight * 0.9) / this.props.targetDiameter
     );
     this.state = {
-      top: this.getRandomNum(this.numOfRows, this.props.targetDiameter),
-      left: this.getRandomNum(this.numOfCols, this.props.targetDiameter),
+      top: getRandomNum(this.numOfRows, this.props.targetDiameter),
+      left: getRandomNum(this.numOfCols, this.props.targetDiameter),
     };
   }
   render() {
@@ -36,11 +41,11 @@ class Target extends React.Component {
         }}
         className="target"
         onClick={(e) => {
-          const newTop = this.getRandomNum(
+          const newTop = getRandomNum(
             this.numOfRows,
             this.props.targetDiameter
           );
-          const newLeft = this.getRandomNum(
+          const newLeft = getRandomNum(
             this.numOfCols,
             this.props.targetDiameter
           );
@@ -48,6 +53,8 @@ class Target extends React.Component {
             top: newTop,
             left: newLeft,
           });
+          this.props.increaseTotalShots()
+          this.props.increaseTargetsHit()
           e.stopPropagation();
         }}
       ></div>
@@ -57,17 +64,25 @@ class Target extends React.Component {
 
 /*
   Game Component
-  @Desc: This component
+  @Desc: This component holds all the game data and handles the renders for said data to the dashbaord. 
+  After the game is over this component will also instigate the end game statistics to populate
 */
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    this.totalShots = 0
+    this.targetsHit = 0
     this.state = {
       inPlay: false,
-      totalShots: 0,
-      targetsHit: 0,
       accuracy: 0,
+      score: 0,
     };
+  }
+  increaseTotalShots() {
+    this.totalShots += 1
+  }
+  increaseTargetsHit() {
+    this.targetsHit += 1
   }
   startPlay() {}
   render() {
@@ -79,11 +94,14 @@ class Game extends React.Component {
           targetColor={this.props.targetColor}
           minute={this.props.minute}
           key={i}
+          increaseTotalShots={this.increaseTotalShots.bind(this)}
+          increaseTargetsHit={this.increaseTargetsHit.bind(this)}
+
         />
       );
     }
     return (
-      <div className="game-board" onClick={() => {}}>
+      <div className="game-board" onClick={this.increaseTotalShots.bind(this)}>
         {array}
       </div>
     );
