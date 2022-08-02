@@ -12,3 +12,7 @@
   box-shadow: 2px 2px 0px rgba(20, 33, 61, 0.7);
   position: absolute;
 }
+
+.in-game-stats {
+  text-align: center;
+}
