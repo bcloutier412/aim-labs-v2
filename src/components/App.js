@@ -24,6 +24,7 @@ class App extends React.Component {
       targetDiameter: 48 + game.targetGap,
       targetColor: "#24B7C2",
       minute: 1,
+      key: 0
     };
   }
   
@@ -71,6 +72,7 @@ class App extends React.Component {
             targetDiameter={this.state.targetDiameter}
             targetColor={this.state.targetColor}
             minute={this.state.minute}
+            key={this.state.key}
           />
         );
         break;

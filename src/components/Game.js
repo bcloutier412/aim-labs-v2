@@ -44,9 +44,7 @@ class Target extends React.Component {
         className="target"
         onClick={(e) => {
           if (this.props.inPlay) {
-            this.props.increaseTotalShots();
-            this.props.increaseTargetsHit();
-            this.props.increaseScore();
+            this.props.calculateStats()
             const newTop = this.getRandomNum(
               this.numOfRows,
               this.props.targetDiameter
@@ -139,11 +137,23 @@ class Game extends React.Component {
   increaseTotalShots() {
     this.totalShots += 1;
   }
-  increaseTargetsHit() {
-    this.targetsHit += 1;
+  calculateAccuracy() {
+    let accuracy = (this.targetsHit / this.totalShots) * 100;
+    accuracy = accuracy.toString().slice(0, 4)
+    this.setState({accuracy: parseInt(accuracy)})
+    
   }
-  increaseScore() {
-    this.setState({ score: this.state.score + 1000 });
+  calculateStats() {
+    this.totalShots += 1;
+    this.targetsHit += 1;
+    let accuracy = (this.targetsHit / this.totalShots) * 100;
+    accuracy = accuracy.toString().slice(0, 4)
+    new Promise((resolve, reject) => {
+      resolve(this.setState({accuracy: parseInt(accuracy)}))
+    })
+    .then(() => {
+      this.setState({score: this.state.score + (1000 * (this.state.accuracy / 100))})
+    })
   }
   startPlay() {
     this.setState({ inPlay: true });
@@ -157,9 +167,7 @@ class Game extends React.Component {
           targetColor={this.props.targetColor}
           minute={this.props.minute}
           key={i}
-          increaseTotalShots={this.increaseTotalShots.bind(this)}
-          increaseTargetsHit={this.increaseTargetsHit.bind(this)}
-          increaseScore={this.increaseScore.bind(this)}
+          calculateStats={this.calculateStats.bind(this)}
           inPlay={this.state.inPlay}
         />
       );
@@ -175,7 +183,12 @@ class Game extends React.Component {
         />
         <div
           className="game-board"
-          onClick={this.increaseTotalShots.bind(this)}
+          onClick={() => {
+            if (this.state.inPlay) {
+              this.increaseTotalShots();
+              this.calculateAccuracy();
+            }
+          }}
         >
           {array}
         </div>
