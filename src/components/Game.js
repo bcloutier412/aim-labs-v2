@@ -44,7 +44,7 @@ class Target extends React.Component {
         className="target"
         onClick={(e) => {
           if (this.props.inPlay) {
-            this.props.calculateStats()
+            this.props.calculateStats();
             const newTop = this.getRandomNum(
               this.numOfRows,
               this.props.targetDiameter
@@ -65,58 +65,96 @@ class Target extends React.Component {
   }
 }
 
-/*
-  In Game Stats Component
-  @Desc: This component will render the time, score, and accuracy variables. It also houses the funtionality of the timer
-
-*/
-class InGameStats extends React.Component {
+class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       minute: this.props.minute,
       second: 0,
-      countdown: 3,
     };
   }
-
   formatSeconds(second) {
     if (second < 10) {
       return "0" + second;
     }
     return second;
   }
-  renderCountdown() {
-    if (!this.props.inPlay) {
-      return this.state.countdown;
+  runTimer() {
+    if (this.state.second === 0 && this.state.minute === 0) {
+      this.props.stopPlay()
+    } else if (this.state.second === 0) {
+      this.setState({ minute: this.state.minute - 1, second: 59})
+      setTimeout(() => {
+        this.runTimer()
+      }, 1000);
+    } else {
+      this.setState({ second: this.state.second - 1})
+      setTimeout(() => {
+        this.runTimer()
+      }, 1000);
     }
   }
-  startCountdown() {
-    if (!this.props.inPlay) {
-      wait(1).then(() => {
-        if (this.state.countdown === 1) {
-          this.setState({ countdown: "GO!" });
-          wait(1).then(() => {
-            this.props.startPlay();
-          });
-        } else if (typeof this.state.countdown === "number") {
-          this.setState({ countdown: this.state.countdown - 1 });
-        }
-      });
-    }
+  componentDidMount() {
+    this.runTimer() 
   }
   render() {
     return (
-      <div className="in-game-stats">
-        {this.state.minute}:{this.formatSeconds(this.state.second)} |{" "}
-        {this.props.score} | {this.props.accuracy}%
-        <div className="countdown">
-          {this.renderCountdown()}
-          {this.startCountdown()}
-        </div>
-      </div>
+      <span>
+        {this.state.minute}:{this.formatSeconds(this.state.second)}
+      </span>
     );
   }
+}
+class Countdown extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      countdown: 3,
+      showCountdown: true
+    };
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ countdown: 2 });
+      setTimeout(() => {
+        this.setState({ countdown: 1 });
+        setTimeout(() => {
+          this.setState({ countdown: 'GO!' });
+          setTimeout(() => {
+            this.props.startPlay()
+            this.setState({ showCountdown: false })
+          }, 1000)
+        }, 1000);
+      }, 1000);
+    }, 1000);
+  }
+  render() {
+    if (this.state.showCountdown) {
+      return <div className="warn">{this.state.countdown}</div>;
+    } else {
+      return null;
+    }
+  }
+}
+/*
+  In Game Stats Component
+  @Desc: This component will render the time, score, and accuracy variables. It also houses the funtionality of the timer
+
+*/
+function InGameStats(props) {
+  let timer;
+    if (props.startTimer) {
+      timer =  <Timer minute={props.minute} startTimer={props.startTimer} stopPlay={props.stopPlay}/>
+    } else {
+      timer = `${props.minute}:00`
+    }
+  return (
+    <div className="in-game-stats">
+    {timer} | {props.score} |{" "}
+    {props.accuracy}%
+    <Countdown inPlay={props.inPlay} startPlay={props.startPlay}/>
+  </div>
+  )
 }
 /*
   Game Component
@@ -132,6 +170,7 @@ class Game extends React.Component {
       inPlay: false,
       accuracy: 0,
       score: 0,
+      startTimer: false,
     };
   }
   increaseTotalShots() {
@@ -139,24 +178,27 @@ class Game extends React.Component {
   }
   calculateAccuracy() {
     let accuracy = (this.targetsHit / this.totalShots) * 100;
-    accuracy = accuracy.toString().slice(0, 4)
-    this.setState({accuracy: parseInt(accuracy)})
-    
+    accuracy = accuracy.toString().slice(0, 4);
+    this.setState({ accuracy: parseInt(accuracy) });
   }
   calculateStats() {
     this.totalShots += 1;
     this.targetsHit += 1;
     let accuracy = (this.targetsHit / this.totalShots) * 100;
-    accuracy = accuracy.toString().slice(0, 4)
+    accuracy = accuracy.toString().slice(0, 4);
     new Promise((resolve, reject) => {
-      resolve(this.setState({accuracy: parseInt(accuracy)}))
-    })
-    .then(() => {
-      this.setState({score: this.state.score + (1000 * (this.state.accuracy / 100))})
-    })
+      resolve(this.setState({ accuracy: parseInt(accuracy) }));
+    }).then(() => {
+      this.setState({
+        score: this.state.score + 1000 * (this.state.accuracy / 100),
+      });
+    });
   }
   startPlay() {
-    this.setState({ inPlay: true });
+    this.setState({ inPlay: true, startTimer: true });
+  }
+  stopPlay() {
+    this.setState({ inPlay: false });
   }
   render() {
     const array = [];
@@ -179,7 +221,9 @@ class Game extends React.Component {
           accuracy={this.state.accuracy}
           minute={this.props.minute}
           inPlay={this.state.inPlay}
+          startTimer={this.state.startTimer}
           startPlay={this.startPlay.bind(this)}
+          stopPlay={this.stopPlay.bind(this)}
         />
         <div
           className="game-board"
