@@ -69,8 +69,9 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      minute: this.props.minute,
-      second: 0,
+      // minute: this.props.minute,
+      minute: 0,
+      second: 5,
     };
   }
   formatSeconds(second) {
@@ -80,22 +81,27 @@ class Timer extends React.Component {
     return second;
   }
   runTimer() {
-    if (this.state.second === 0 && this.state.minute === 0) {
-      this.props.stopPlay()
-    } else if (this.state.second === 0) {
-      this.setState({ minute: this.state.minute - 1, second: 59})
+    if(this.state.minute === 0 && this.state.second === 0) {
+      return
+    }
+    else if (this.state.second === 0) {
+      this.setState({ minute: this.state.minute - 1, second: 59 })
       setTimeout(() => {
         this.runTimer()
       }, 1000);
     } else {
-      this.setState({ second: this.state.second - 1})
+      this.setState({second: this.state.second - 1})
+      if(this.state.minute === 0 && this.state.second === 1) {
+        this.props.stopPlay()
+      }
       setTimeout(() => {
         this.runTimer()
       }, 1000);
     }
   }
   componentDidMount() {
-    this.runTimer() 
+    this.runTimer();
+
   }
   render() {
     return (
@@ -110,7 +116,7 @@ class Countdown extends React.Component {
     super(props);
     this.state = {
       countdown: 3,
-      showCountdown: true
+      showCountdown: true,
     };
   }
   componentDidMount() {
@@ -119,11 +125,11 @@ class Countdown extends React.Component {
       setTimeout(() => {
         this.setState({ countdown: 1 });
         setTimeout(() => {
-          this.setState({ countdown: 'GO!' });
+          this.setState({ countdown: "GO!" });
           setTimeout(() => {
-            this.props.startPlay()
-            this.setState({ showCountdown: false })
-          }, 1000)
+            this.props.startPlay();
+            this.setState({ showCountdown: false });
+          }, 1000);
         }, 1000);
       }, 1000);
     }, 1000);
@@ -143,18 +149,23 @@ class Countdown extends React.Component {
 */
 function InGameStats(props) {
   let timer;
-    if (props.startTimer) {
-      timer =  <Timer minute={props.minute} startTimer={props.startTimer} stopPlay={props.stopPlay}/>
-    } else {
-      timer = `${props.minute}:00`
-    }
+  if (props.startTimer) {
+    timer = (
+      <Timer
+        minute={props.minute}
+        startTimer={props.startTimer}
+        stopPlay={props.stopPlay}
+      />
+    );
+  } else {
+    timer = `${props.minute}:00`;
+  }
   return (
     <div className="in-game-stats">
-    {timer} | {props.score} |{" "}
-    {props.accuracy}%
-    <Countdown inPlay={props.inPlay} startPlay={props.startPlay}/>
-  </div>
-  )
+      {timer} | {props.score} | {props.accuracy}%
+      <Countdown inPlay={props.inPlay} startPlay={props.startPlay} />
+    </div>
+  );
 }
 /*
   Game Component
