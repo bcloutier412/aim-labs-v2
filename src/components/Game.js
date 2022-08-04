@@ -1,13 +1,13 @@
 import React from "react";
 import "./Game.css";
 
-const wait = function (seconds) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve();
-    }, seconds * 1000);
-  });
-};
+// const wait = function (seconds) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve();
+//     }, seconds * 1000);
+//   });
+// };
 /*
   Target Component
   @Desc: this component renders a div with the class of .target and onclick will;
@@ -65,13 +65,17 @@ class Target extends React.Component {
   }
 }
 
+/*
+  Timer Component
+  @desc: This component controls how much time is left in every round 
+*/
 class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // minute: this.props.minute,
-      minute: 0,
-      second: 5,
+      minute: this.props.minute,
+      // minute: 0,
+      second: 0,
     };
   }
   formatSeconds(second) {
@@ -81,17 +85,19 @@ class Timer extends React.Component {
     return second;
   }
   runTimer() {
-    if(this.state.minute === 0 && this.state.second === 0) {
+    const minute = this.state.minute
+    const second = this.state.second
+    if(minute === 0 && second === 0) {
       return
     }
-    else if (this.state.second === 0) {
-      this.setState({ minute: this.state.minute - 1, second: 59 })
+    else if (second === 0) {
+      this.setState({ minute: minute - 1, second: 59 })
       setTimeout(() => {
         this.runTimer()
       }, 1000);
     } else {
-      this.setState({second: this.state.second - 1})
-      if(this.state.minute === 0 && this.state.second === 1) {
+      this.setState({second: second - 1})
+      if(minute === 0 && second === 1) {
         this.props.stopPlay()
       }
       setTimeout(() => {

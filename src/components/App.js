@@ -44,7 +44,7 @@ class App extends React.Component {
     this.setState({ minute: e.target.value });
   }
   startGame() {
-    this.setState({ gameStage: "Game" });
+    this.setState({ gameStage: "Game", key: this.state.key + 1 });
   }
 
   /*
